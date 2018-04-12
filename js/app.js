@@ -1,5 +1,5 @@
 /*
- * Create a list that holds all of your cards
+ * Create a list that holds all of the cards
  */
  
 const cardsArr = [
@@ -21,37 +21,6 @@ const cardsArr = [
 	"fa-paper-plane-o"
 ];
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
- 
-function createGrid() {
-
-	shuffle(cardsArr);
-	
-	const fragment = document.createDocumentFragment();
-	
-	cardsArr.forEach(function(card) {
-	
-		const cardHTML = document.createElement("li");
-		cardHTML.classList.add("card");
-		
-		const cardHTMLImage = document.createElement("i");
-		cardHTMLImage.classList.add("fa", card);
-		
-		cardHTML.appendChild(cardHTMLImage);
-		
-		fragment.appendChild(cardHTML);
-	});
-	
-	const deck = document.querySelector(".deck");
-	
-	deck.appendChild(fragment);
-}
-
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
 	var currentIndex = array.length, temporaryValue, randomIndex;
@@ -67,10 +36,51 @@ function shuffle(array) {
 	return array;
 }
 
+/*
+ * Display the cards on the page
+ */
+ 
+function createGrid() {
+
+//shuffle the list of cards
+	shuffle(cardsArr);
+	
+	const fragment = document.createDocumentFragment();
+
+//loop through each card and create its HTML
+	cardsArr.forEach(function(card) {
+	
+		const cardHTML = document.createElement("li");
+		cardHTML.classList.add("card");
+		
+		const cardHTMLImage = document.createElement("i");
+		cardHTMLImage.classList.add("fa", card);
+		
+		cardHTML.appendChild(cardHTMLImage);
+		
+		fragment.appendChild(cardHTML);
+	});
+	
+	const deck = document.querySelector(".deck");
+
+//add each card's HTML to the page
+	deck.appendChild(fragment);
+}
+
+
+/*
+ * Open a card
+ */
+function openCard(target) {
+
+	if (target.nodeName === 'LI') {  // ← verifies target is desired element
+		//display the card's symbol
+		target.classList.add("open", "show");
+	}
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
  *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
  *  - if the list already has another card, check to see if the two cards match
  *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
@@ -81,4 +91,8 @@ function shuffle(array) {
 
 document.addEventListener('DOMContentLoaded', function () {
 	createGrid();
+	
+	document.querySelector('.deck').addEventListener('click', function (event) {
+		openCard(event.target);
+	});
 });
