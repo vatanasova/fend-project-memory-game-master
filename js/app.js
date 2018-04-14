@@ -1,5 +1,5 @@
 /*
- * Create a list that holds all of the cards
+ * List that holds all of the cards
  */
  
 const cardsArr = [
@@ -20,6 +20,14 @@ const cardsArr = [
 	"fa-leaf",
 	"fa-paper-plane-o"
 ];
+
+/*
+ * List of "open" cards
+*/
+const openCards = [];
+
+let matchCounter = 0;
+let moveCounter = 0;
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -67,32 +75,121 @@ function createGrid() {
 	deck.appendChild(fragment);
 }
 
-
 /*
- * Open a card
+ * Open card - display the card's symbol
  */
 function openCard(target) {
+	target.classList.add("open", "show");
+}
 
-	if (target.nodeName === 'LI') {  // ← verifies target is desired element
-		//display the card's symbol
-		target.classList.add("open", "show");
+/*
+ * Add card to a *list* of "open" cards
+ */
+function addCardToOpenCards(iconClass) {
+	openCards.push(iconClass);
+}
+
+/*
+ * Lock card in open position
+ */
+function lockCards(iconClass) {
+
+	const icons = document.getElementsByClassName(iconClass);
+	
+	for (let i = 0; i < icons.length; i++) {
+	
+		const parent = icons[i].parentNode;
+		
+		parent.classList.remove("open", "show");
+		parent.classList.add("match");
 	}
 }
 
 /*
+ * Hide card's symbol
+ */
+function closeCard(iconClass) {   
+
+	const icons = document.getElementsByClassName(iconClass);
+
+	for (let i = 0; i < icons.length; i++) {
+	
+		const parent = icons[i].parentNode;
+		
+		parent.classList.remove("open", "show");
+	}
+}
+
+/*
+ * Remove cards from the *list* of "open" cards
+ */
+function removeCardsFromOpenCards() {
+	openCards.pop();
+	openCards.pop();
+}
+
+/*
+ * Increments move counter and displays it
+ */
+function updateMoves() {
+
+	moveCounter ++;
+				
+	const movesContainer = document.querySelector(".moves");
+	movesContainer.textContent = moveCounter;
+}
+
+/*
+ * Display a message with the final score
+ */
+function finalScore() {
+	
+}
+
+/*
  * set up the event listener for a card. If a card is clicked:
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
  *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+ *    + if the cards do match, lock the cards in the open position
+ *    + if the cards do not match, remove the cards from the list and hide the card's symbol
+ *    + increment the move counter and display it on the page
+ *    + if all cards have matched, display a message with the final score
  */
 
 document.addEventListener('DOMContentLoaded', function () {
+
 	createGrid();
 	
 	document.querySelector('.deck').addEventListener('click', function (event) {
-		openCard(event.target);
-	});
+	
+		const target = event.target;
+	
+		if ((target.nodeName === 'LI') && !target.classList.contains("match") && !target.classList.contains("open")) {
+		
+			openCard(target);
+			
+			const iconClasses = target.firstChild.classList;
+			const iconClass = iconClasses.item(iconClasses.length - 1);
+
+			addCardToOpenCards(iconClass);
+			
+			if (openCards.length > 1) {
+				if (openCards[0] === openCards[1]) {
+					lockCards(iconClass);
+					
+					matchCounter ++;
+					if (matchCounter == (cardsArr.length/2)) {
+						finalScore();
+					}
+				} else {
+					openCards.forEach(function(iconClass) {
+						setTimeout(closeCard, 1000, iconClass);
+					});
+				}
+				
+				removeCardsFromOpenCards();
+				
+				updateMoves();
+			}
+		}
+	}); 
 });
