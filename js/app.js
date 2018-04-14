@@ -28,6 +28,7 @@ const openCards = [];
 
 let matchCounter = 0;
 let moveCounter = 0;
+let starRating = 3;
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -129,6 +130,20 @@ function removeCardsFromOpenCards() {
 }
 
 /*
+ * Updates star rating
+ */
+function updateRating() {
+
+	if ((moveCounter % 15 === 0) && (starRating > 1)) {
+		starRating --;
+		
+		const solidStars = document.querySelectorAll(".fa-star");
+		const lastSolidStar = solidStars[solidStars.length - 1];
+		lastSolidStar.classList.replace("fa-star", "fa-star-o");
+	}
+}
+
+/*
  * Increments move counter and displays it
  */
 function updateMoves() {
@@ -137,6 +152,8 @@ function updateMoves() {
 				
 	const movesContainer = document.querySelector(".moves");
 	movesContainer.textContent = moveCounter;
+	
+	updateRating();
 }
 
 /*
