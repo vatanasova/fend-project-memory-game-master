@@ -29,6 +29,9 @@ const openCards = [];
 let matchCounter = 0;
 let moveCounter = 0;
 let starRating = 3;
+const start = new Date().getTime();
+let elapsed = 0;
+let totalTime;
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -144,6 +147,20 @@ function updateRating() {
 }
 
 /*
+ * Timer
+ */
+function gameTimer() {
+
+	const time = new Date().getTime() - start;
+
+	t = Math.floor(time / 1000)
+	elapsed = Math.floor(t/60) + "m" + Math.floor(t%60) + "s";
+
+	const timerCont = document.querySelector(".timer");
+	timerCont.textContent = elapsed;
+}
+
+/*
  * Increments move counter and displays it
  */
 function updateMoves() {
@@ -159,8 +176,9 @@ function updateMoves() {
 /*
  * Display a message with the final score
  */
-function finalScore() {
-	
+function gameOver() {
+	console.log("totalTime = " + totalTime);
+	console.log("star rating = " + starRating);
 }
 
 /*
@@ -180,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	
 		const target = event.target;
 	
-		if ((target.nodeName === 'LI') && !target.classList.contains("match") && !target.classList.contains("open")) {
+		if ((target.nodeName === 'LI') && !target.classList.contains("match") && !target.classList.contains("open") && (openCards.length < 2)) {
 		
 			openCard(target);
 			
@@ -195,11 +213,13 @@ document.addEventListener('DOMContentLoaded', function () {
 					
 					matchCounter ++;
 					if (matchCounter == (cardsArr.length/2)) {
-						finalScore();
+						totalTime = elapsed;
+						clearTimeout(timeVar);
+						gameOver();
 					}
 				} else {
-					openCards.forEach(function(iconClass) {
-						setTimeout(closeCard, 1000, iconClass);
+					openCards.forEach(function(iconClass) { 
+						setTimeout(closeCard, 500, iconClass);
 					});
 				}
 				
@@ -209,4 +229,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		}
 	}); 
+	
+	timeVar = setInterval(gameTimer, 100);
 });
