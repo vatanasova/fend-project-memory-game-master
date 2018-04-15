@@ -29,7 +29,7 @@ const openCards = [];
 let matchCounter = 0;
 let moveCounter = 0;
 let starRating = 3;
-const start = new Date().getTime();
+let start = new Date().getTime();
 let elapsed = 0;
 let totalTime;
 
@@ -51,7 +51,6 @@ function shuffle(array) {
 /*
  * Display the cards on the page
  */
- 
 function createGrid() {
 
 //shuffle the list of cards
@@ -77,6 +76,22 @@ function createGrid() {
 
 //add each card's HTML to the page
 	deck.appendChild(fragment);
+}
+
+/*
+ * Resets the grid
+ */
+function resetGrid() {
+
+	matchCounter = 0;
+
+	const grid = document.querySelector(".deck");
+	
+	while (grid.firstChild) {
+		grid.removeChild(grid.firstChild);
+	}
+	
+	createGrid();
 }
 
 /*
@@ -147,6 +162,21 @@ function updateRating() {
 }
 
 /*
+ * Resets star rating
+ */
+function resetRating() {
+
+	starRating = 3;
+
+	const starsCont = document.querySelector(".stars");
+	const stars = starsCont.children;
+	
+	for (let i = 0; i < stars.length; i++) {
+		stars[i].firstChild.classList.replace("fa-star-o", "fa-star");
+	}
+}
+
+/*
  * Timer
  */
 function gameTimer() {
@@ -161,6 +191,19 @@ function gameTimer() {
 }
 
 /*
+ * Resets game timer
+ */
+function resetTimer() {
+
+	start = new Date().getTime();
+	elapsed = 0;
+	
+	clearTimeout(timeVar);
+	
+	timeVar = setInterval(gameTimer, 100);
+}
+
+/*
  * Increments move counter and displays it
  */
 function updateMoves() {
@@ -171,6 +214,17 @@ function updateMoves() {
 	movesContainer.textContent = moveCounter;
 	
 	updateRating();
+}
+
+/*
+ * Resets move counter and displays it
+ */
+function resetMoves() {
+
+	moveCounter = 0;
+
+	const movesContainer = document.querySelector(".moves");
+	movesContainer.textContent = moveCounter;
 }
 
 /*
@@ -189,11 +243,8 @@ function gameOver() {
  *    + increment the move counter and display it on the page
  *    + if all cards have matched, display a message with the final score
  */
-
-document.addEventListener('DOMContentLoaded', function () {
-
-	createGrid();
-	
+ 
+function cardEvtListener() {
 	document.querySelector('.deck').addEventListener('click', function (event) {
 	
 		const target = event.target;
@@ -228,7 +279,36 @@ document.addEventListener('DOMContentLoaded', function () {
 				updateMoves();
 			}
 		}
-	}); 
-	
+	});
+}
+
+/*
+ * Reset the game board, the timer, and the star rating
+ */
+function reset() {
+
+	resetGrid();
+	resetRating();
+	resetMoves();
+	resetTimer();
+}
+
+/*
+ * Event listener for the restart button click
+ */
+function resetListener() {
+
+	const resetEl = document.querySelector(".restart");
+	resetEl.addEventListener("click", reset);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+//create card grid
+	createGrid();
+//set up card event listener
+	cardEvtListener();
+//set up reset event listener
+	resetListener();
+//start game timer	
 	timeVar = setInterval(gameTimer, 100);
 });
