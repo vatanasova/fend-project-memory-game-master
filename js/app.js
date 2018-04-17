@@ -228,14 +228,6 @@ function resetMoves() {
 }
 
 /*
- * Display a message with the final score
- */
-function gameOver() {
-	console.log("totalTime = " + totalTime);
-	console.log("star rating = " + starRating);
-}
-
-/*
  * set up the event listener for a card. If a card is clicked:
  *  - if the list already has another card, check to see if the two cards match
  *    + if the cards do match, lock the cards in the open position
@@ -300,6 +292,41 @@ function resetListener() {
 
 	const resetEl = document.querySelector(".restart");
 	resetEl.addEventListener("click", reset);
+}
+
+/*
+ * Display a message with the final score
+ */
+function gameOver() {
+	
+	// Get the modal
+	const modal = document.getElementById('gameOverModal');
+	//Open the modal
+	modal.style.display = "block";
+	document.querySelector(".timeSpent").textContent = totalTime;
+	document.querySelector(".starsWon").textContent = starRating;
+	
+	const startNewGameBtn = document.getElementById("startNewGame");
+	// When the user clicks on the button, reset the game
+	startNewGameBtn.addEventListener("click", function() {
+		modal.style.display = "none";
+		reset();
+	});
+	
+	// Get the <span> element that closes the modal
+	const closeSpan = document.getElementsByClassName("close")[0];
+	
+	// When the user clicks on <span> (x), close the modal
+	closeSpan.addEventListener("click", function() {
+		modal.style.display = "none";
+	});
+	
+	// When the user clicks anywhere outside of the modal, close it
+	window.addEventListener("click", function(event) {
+		if (event.target == modal) {
+			modal.style.display = "none";
+		}
+	}); 
 }
 
 document.addEventListener('DOMContentLoaded', function () {
