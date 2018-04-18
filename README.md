@@ -15,28 +15,20 @@ The game ends once all cards have been correctly matched.
 
 ## Game Behavior
 
-###Memory Game Logic
+**Memory Game Logic**
 The game randomly shuffles the cards. A user wins once all cards have successfully been matched.
 
-###Congratulations Popup
+**Congratulations Popup**
 When a user wins the game, a modal appears to congratulate the player and ask if they want to play again. It also tells the user how much time it took to win the game, and what the star rating was.
 
-###Restart Button
+**Restart Button**
 A restart button allows the player to reset the game board, the timer, and the star rating.
 
-###Star Rating
+**Star Rating**
 The game displays a star rating (from 1-3) that reflects the player's performance. At the beginning of a game, it displays 3 stars. After 15 moves, it changes to a 2 star rating. After another 15 moves, it changes to a 1 star rating.
 
-###Timer
+**Timer**
 When the player starts a game, a displayed timer also start. Once the player wins the game, the timer stops.
 
-###Move Counter
+**Move Counter**
 Game displays the current number of moves a user has made.
-
-##Interface Design
-
-###Styling
-Application uses CSS to style components for the game.
-
-###Usability
-All application components are usable across modern desktop, tablet, and phone browsers.
