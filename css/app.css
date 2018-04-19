@@ -169,6 +169,10 @@ h1 {
 	font-weight: bold;
 }
 
+.movesMade {
+	font-weight: bold;
+}
+
 #startNewGame {
 	width: 100px;
 	padding: 10px;

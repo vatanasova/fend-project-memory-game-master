@@ -206,7 +206,7 @@ function resetTimer() {
 	timerStarted = false;
 	
 	const timerCont = document.querySelector(".timer");
-	timerCont.textContent = "0m00s";
+	timerCont.textContent = "0m0s";
 }
 
 /*
@@ -244,6 +244,7 @@ function gameOver() {
 	modal.style.display = "block";
 	document.querySelector(".timeSpent").textContent = totalTime;
 	document.querySelector(".starsWon").textContent = starRating;
+	document.querySelector(".movesMade").textContent = moveCounter;
 	
 	const startNewGameBtn = document.getElementById("startNewGame");
 	// When the user clicks on the button, reset the game
@@ -283,9 +284,7 @@ function cardEvtListener() {
 		if (timerStarted == false) {
 				//start game timer
 				start = new Date().getTime();
-				
 				timeVar = setInterval(gameTimer, 100);
-			
 				timerStarted = true;
 		}
 	
@@ -301,6 +300,8 @@ function cardEvtListener() {
 			addCardToOpenCards(iconClass);
 			
 			if (openCards.length > 1) {
+				updateMoves();
+			
 				if (openCards[0] === openCards[1]) {
 					lockCards(iconClass);
 					
@@ -317,8 +318,6 @@ function cardEvtListener() {
 				}
 				
 				removeCardsFromOpenCards();
-				
-				updateMoves();
 			}
 		}
 	});
