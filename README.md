@@ -19,7 +19,7 @@ The game ends once all cards have been correctly matched.
 The game randomly shuffles the cards. A user wins once all cards have successfully been matched.
 
 **Congratulations Popup**
-When a user wins the game, a modal appears to congratulate the player and ask if they want to play again. It also tells the user how much time it took to win the game, and what the star rating was.
+When a user wins the game, a modal appears to congratulate the player and ask if they want to play again. It also tells the user how much time it took to win the game, what the star rating was and how many moves were made.
 
 **Restart Button**
 A restart button allows the player to reset the game board, the timer, and the star rating.
@@ -28,7 +28,7 @@ A restart button allows the player to reset the game board, the timer, and the s
 The game displays a star rating (from 1-3) that reflects the player's performance. At the beginning of a game, it displays 3 stars. After 15 moves, it changes to a 2 star rating. After another 15 moves, it changes to a 1 star rating.
 
 **Timer**
-When the player starts a game, a displayed timer also start. Once the player wins the game, the timer stops.
+When the player starts a game, e.g. when the player first clicks on the board, a displayed timer also start. Once the player wins the game, the timer stops.
 
 **Move Counter**
 Game displays the current number of moves a user has made.
