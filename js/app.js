@@ -29,13 +29,16 @@ const openCards = [];
 let matchCounter = 0;
 let moveCounter = 0;
 let starRating = 3;
-let start = new Date().getTime();
+let start;
+let time;
+let timerStarted = false;
 let elapsed = 0;
 let totalTime;
+let timeVar;
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
-	var currentIndex = array.length, temporaryValue, randomIndex;
+	let currentIndex = array.length, temporaryValue, randomIndex;
 
 	while (currentIndex !== 0) {
 		randomIndex = Math.floor(Math.random() * currentIndex);
@@ -84,6 +87,7 @@ function createGrid() {
 function resetGrid() {
 
 	matchCounter = 0;
+	removeCardsFromOpenCards();
 
 	const grid = document.querySelector(".deck");
 	
@@ -181,7 +185,7 @@ function resetRating() {
  */
 function gameTimer() {
 
-	const time = new Date().getTime() - start;
+	time = new Date().getTime() - start;
 
 	t = Math.floor(time / 1000)
 	elapsed = Math.floor(t/60) + "m" + Math.floor(t%60) + "s";
@@ -195,12 +199,14 @@ function gameTimer() {
  */
 function resetTimer() {
 
-	start = new Date().getTime();
 	elapsed = 0;
 	
 	clearTimeout(timeVar);
 	
-	timeVar = setInterval(gameTimer, 100);
+	timerStarted = false;
+	
+	const timerCont = document.querySelector(".timer");
+	timerCont.textContent = "0m00s";
 }
 
 /*
@@ -228,6 +234,41 @@ function resetMoves() {
 }
 
 /*
+ * Display a message with the final score
+ */
+function gameOver() {
+	
+	// Get the modal
+	const modal = document.getElementById('gameOverModal');
+	//Open the modal
+	modal.style.display = "block";
+	document.querySelector(".timeSpent").textContent = totalTime;
+	document.querySelector(".starsWon").textContent = starRating;
+	
+	const startNewGameBtn = document.getElementById("startNewGame");
+	// When the user clicks on the button, reset the game
+	startNewGameBtn.addEventListener("click", function() {
+		modal.style.display = "none";
+		reset();
+	});
+	
+	// Get the <span> element that closes the modal
+	const closeSpan = document.getElementsByClassName("close")[0];
+	
+	// When the user clicks on <span> (x), close the modal
+	closeSpan.addEventListener("click", function() {
+		modal.style.display = "none";
+	});
+	
+	// When the user clicks anywhere outside of the modal, close it
+	window.addEventListener("click", function(event) {
+		if (event.target == modal) {
+			modal.style.display = "none";
+		}
+	}); 
+}
+
+/*
  * set up the event listener for a card. If a card is clicked:
  *  - if the list already has another card, check to see if the two cards match
  *    + if the cards do match, lock the cards in the open position
@@ -238,6 +279,15 @@ function resetMoves() {
  
 function cardEvtListener() {
 	document.querySelector('.deck').addEventListener('click', function (event) {
+	
+		if (timerStarted == false) {
+				//start game timer
+				start = new Date().getTime();
+				
+				timeVar = setInterval(gameTimer, 100);
+			
+				timerStarted = true;
+		}
 	
 		const target = event.target;
 	
@@ -294,41 +344,6 @@ function resetListener() {
 	resetEl.addEventListener("click", reset);
 }
 
-/*
- * Display a message with the final score
- */
-function gameOver() {
-	
-	// Get the modal
-	const modal = document.getElementById('gameOverModal');
-	//Open the modal
-	modal.style.display = "block";
-	document.querySelector(".timeSpent").textContent = totalTime;
-	document.querySelector(".starsWon").textContent = starRating;
-	
-	const startNewGameBtn = document.getElementById("startNewGame");
-	// When the user clicks on the button, reset the game
-	startNewGameBtn.addEventListener("click", function() {
-		modal.style.display = "none";
-		reset();
-	});
-	
-	// Get the <span> element that closes the modal
-	const closeSpan = document.getElementsByClassName("close")[0];
-	
-	// When the user clicks on <span> (x), close the modal
-	closeSpan.addEventListener("click", function() {
-		modal.style.display = "none";
-	});
-	
-	// When the user clicks anywhere outside of the modal, close it
-	window.addEventListener("click", function(event) {
-		if (event.target == modal) {
-			modal.style.display = "none";
-		}
-	}); 
-}
-
 document.addEventListener('DOMContentLoaded', function () {
 //create card grid
 	createGrid();
@@ -336,6 +351,4 @@ document.addEventListener('DOMContentLoaded', function () {
 	cardEvtListener();
 //set up reset event listener
 	resetListener();
-//start game timer	
-	timeVar = setInterval(gameTimer, 100);
 });
