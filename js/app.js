@@ -29,12 +29,9 @@ const openCards = [];
 let matchCounter = 0;
 let moveCounter = 0;
 let starRating = 3;
-let start;
-let time;
+let start, timeVar;
 let timerStarted = false;
 let elapsed = 0;
-let totalTime;
-let timeVar;
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -185,7 +182,7 @@ function resetRating() {
  */
 function gameTimer() {
 
-	time = new Date().getTime() - start;
+	let time = new Date().getTime() - start;
 
 	t = Math.floor(time / 1000)
 	elapsed = Math.floor(t/60) + "m" + Math.floor(t%60) + "s";
@@ -195,9 +192,9 @@ function gameTimer() {
 }
 
 /*
- * Resets game timer
+ * Stops game timer
  */
-function resetTimer() {
+function stopTimer() {
 
 	elapsed = 0;
 	
@@ -242,7 +239,7 @@ function gameOver() {
 	const modal = document.getElementById('gameOverModal');
 	//Open the modal
 	modal.style.display = "block";
-	document.querySelector(".timeSpent").textContent = totalTime;
+	document.querySelector(".timeSpent").textContent = elapsed;
 	document.querySelector(".starsWon").textContent = starRating;
 	document.querySelector(".movesMade").textContent = moveCounter;
 	
@@ -307,7 +304,6 @@ function cardEvtListener() {
 					
 					matchCounter ++;
 					if (matchCounter == (cardsArr.length/2)) {
-						totalTime = elapsed;
 						clearTimeout(timeVar);
 						gameOver();
 					}
@@ -331,7 +327,7 @@ function reset() {
 	resetGrid();
 	resetRating();
 	resetMoves();
-	resetTimer();
+	stopTimer();
 }
 
 /*
