@@ -10,16 +10,10 @@ const cardsArr = [
 	"fa-cube",
 	"fa-diamond",
 	"fa-leaf",
-	"fa-paper-plane-o",
-	"fa-anchor",
-	"fa-bicycle",
-	"fa-bolt",
-	"fa-bomb",
-	"fa-cube",
-	"fa-diamond",
-	"fa-leaf",
 	"fa-paper-plane-o"
 ];
+
+const doubledCardsArr = cardsArr.concat(cardsArr);
 
 /*
  * List of "open" cards
@@ -54,12 +48,12 @@ function shuffle(array) {
 function createGrid() {
 
 //shuffle the list of cards
-	shuffle(cardsArr);
+	shuffle(doubledCardsArr);
 	
 	const fragment = document.createDocumentFragment();
 
 //loop through each card and create its HTML
-	cardsArr.forEach(function(card) {
+	doubledCardsArr.forEach(function(card) {
 	
 		const cardHTML = document.createElement("li");
 		cardHTML.classList.add("card");
@@ -303,7 +297,7 @@ function cardEvtListener() {
 					lockCards(iconClass);
 					
 					matchCounter ++;
-					if (matchCounter == (cardsArr.length/2)) {
+					if (matchCounter == (doubledCardsArr.length/2)) {
 						clearTimeout(timeVar);
 						gameOver();
 					}
